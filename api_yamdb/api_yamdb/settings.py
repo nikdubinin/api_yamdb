@@ -1,3 +1,5 @@
+import os
+
 from pathlib import Path
 
 
@@ -21,6 +23,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'users',
 ]
 
 MIDDLEWARE = [
@@ -39,7 +42,7 @@ TEMPLATES_DIR = BASE_DIR / 'templates'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [TEMPLATES_DIR],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -101,3 +104,17 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = ((BASE_DIR / 'static/'),)
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ],
+}
+
+AUTH_USER_MODEL = 'users.User'
+
+EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
+
+EMAIL_FILE_PATH = os.path.join(BASE_DIR, "sent_emails")
+
+DEFAULT_FROM_EMAIL = 'noreply@yamdb.com'
