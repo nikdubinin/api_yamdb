@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from django.conf import settings
 from django.shortcuts import get_object_or_404
 from django.core.validators import MinValueValidator, MaxValueValidator
 from reviews.models import Category, Genre, Title, Review, Comment
@@ -17,31 +18,34 @@ class GenreSerializer(serializers.ModelSerializer):
 
 
 class TitleGetSerializer(serializers.ModelSerializer):
-    rating = serializers.IntegerField(read_only=True)
-    genre = GenreSerializer(read_only=True, many=True)
-    category = CategorySerializer(read_only=True)
+    rating = serializers.IntegerField(required=False)
+    genre = GenreSerializer(many=True)
+    category = CategorySerializer()
 
     class Meta:
         fields = "__all__"
         model = Title
+        read_only_fields = (
+            'id', 'name', 'year', 'description', 'genre', 'category', 'rating'
+        )
 
 
 class TitlePostSerializer(serializers.ModelSerializer):
     genre = serializers.SlugRelatedField(
-        required=True,
         many=True,
         slug_field='slug',
         queryset=Genre.objects.all()
     )
     category = serializers.SlugRelatedField(
-        required=True,
         slug_field='slug',
         queryset=Category.objects.all()
     )
+    rating = serializers.IntegerField(required=False)
 
     class Meta:
         fields = '__all__'
         model = Title
+        read_only_fields = ('id', 'rating')
 
 
 class ReviewSerializer(serializers.ModelSerializer):
@@ -51,15 +55,13 @@ class ReviewSerializer(serializers.ModelSerializer):
         slug_field='username'
     )
     score = serializers.IntegerField(
-        validators=(
-            MinValueValidator(1),
-            MaxValueValidator(10)
-        )
+        min_value=settings.MIN_SCORE, max_value=settings.MAX_SCORE
     )
 
     class Meta:
         fields = '__all__'
         model = Review
+        read_only_fields = ('title',)
 
     def validate(self, data):
         if self.context['request'].method != 'POST':
