@@ -6,13 +6,13 @@ from reviews.models import Category, Genre, Title, Review, Comment
 
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
-        fields = '__all__'
+        exclude = ('id',)
         model = Category
 
 
 class GenreSerializer(serializers.ModelSerializer):
     class Meta:
-        fields = '__all__'
+        exclude = ('id',)
         model = Genre
 
 
@@ -28,11 +28,13 @@ class TitleGetSerializer(serializers.ModelSerializer):
 
 class TitlePostSerializer(serializers.ModelSerializer):
     genre = serializers.SlugRelatedField(
-        slug_field='slug',
+        required=True,
         many=True,
+        slug_field='slug',
         queryset=Genre.objects.all()
     )
     category = serializers.SlugRelatedField(
+        required=True,
         slug_field='slug',
         queryset=Category.objects.all()
     )
@@ -44,7 +46,9 @@ class TitlePostSerializer(serializers.ModelSerializer):
 
 class ReviewSerializer(serializers.ModelSerializer):
     author = serializers.SlugRelatedField(
-        read_only=True, slug_field='username'
+        read_only=True,
+        default=serializers.CurrentUserDefault(),
+        slug_field='username'
     )
     score = serializers.IntegerField(
         validators=(
@@ -73,6 +77,9 @@ class ReviewSerializer(serializers.ModelSerializer):
 class CommentSerializer(serializers.ModelSerializer):
     author = serializers.SlugRelatedField(
         read_only=True, slug_field='username'
+    )
+    review = serializers.ReadOnlyField(
+        source='review.id'
     )
 
     class Meta:

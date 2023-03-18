@@ -6,6 +6,10 @@ from .managers import UserRole, UserManager
 
 class User(AbstractUser):
 
+    USER = 'user'
+    MODERATOR = 'moderator'
+    ADMIN = 'admin'
+
     username = models.CharField(
         verbose_name='Имя пользователя',
         max_length=150,
@@ -15,7 +19,8 @@ class User(AbstractUser):
     email = models.EmailField(
         verbose_name='Email',
         blank=False,
-        unique=True)
+        unique=True
+    )
     first_name = models.CharField(
         verbose_name='Имя',
         max_length=150,
@@ -48,11 +53,11 @@ class User(AbstractUser):
 
     @property
     def is_admin(self):
-        return self.role == User.ADMIN
+        return self.role == self.ADMIN or self.is_superuser
 
     @property
     def is_moderator(self):
-        return self.role == User.MODERATOR
+        return self.role == self.MODERATOR
 
     def __str__(self):
         return self.username
