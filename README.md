@@ -30,7 +30,7 @@ http://localhost:8000/redoc/
 Клонировать репозиторий и перейти в него в командной строке:
 
 ```
-git clone https://github.com/pozdnysheva/YaMDB-API.git
+git clone https://github.com/nikdubinin/api_yamdb.git
 ```
 
 ```
@@ -72,7 +72,7 @@ python3 manage.py migrate
 Заполнить базу данных тестовой информацией:
 
 ```
-python manage.py load_to_database
+python manage.py csv_to_db
 ```
 
 Запустить проект:
