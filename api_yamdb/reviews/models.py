@@ -1,10 +1,11 @@
 from django.db import models
 
+from users.models import User
+
 
 class Category(models.Model):
     name = models.CharField(
         max_length=256,
-        unique=True,
         verbose_name='Название'
     )
     slug = models.SlugField(
@@ -25,7 +26,6 @@ class Category(models.Model):
 class Genre(models.Model):
     name = models.CharField(
         max_length=256,
-        unique=True,
         verbose_name='Название'
     )
     slug = models.SlugField(
@@ -60,11 +60,13 @@ class Title(models.Model):
         Genre,
         through='GenreTitle',
         related_name='titles',
+        blank=True,
         verbose_name='Жанр'
     )
     category = models.ForeignKey(
         Category,
         on_delete=models.SET_NULL,
+        blank=True,
         null=True,
         related_name='titles',
         verbose_name='Категория'
@@ -124,6 +126,14 @@ class Review(models.Model):
 
     class Meta:
         ordering = ['-pub_date']
+        verbose_name = 'Отзыв'
+        verbose_name_plural = 'Отзывы'
+        constraints = [
+            models.UniqueConstraint(
+                fields=['title', 'author'],
+                name='unique_title_author'
+            )
+        ]
 
 
 class Comment(models.Model):
@@ -137,11 +147,11 @@ class Comment(models.Model):
         verbose_name='Автор'
     )
     pub_date = models.DateTimeField(
-        verbose_name='Дата публикации',
         auto_now_add=True,
-        db_index=True
+        db_index=True,
+        verbose_name='Дата публикации'
     )
-    rewiew = models.ForeignKey(
+    review = models.ForeignKey(
         Review,
         on_delete=models.CASCADE,
         related_name='comments',
@@ -153,3 +163,5 @@ class Comment(models.Model):
 
     class Meta:
         ordering = ['-pub_date']
+        verbose_name = 'Комментарий'
+        verbose_name_plural = 'Комментарии'
