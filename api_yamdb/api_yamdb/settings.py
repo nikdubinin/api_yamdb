@@ -132,7 +132,12 @@ EMAIL_FILE_PATH = os.path.join(BASE_DIR, "sent_emails")
 
 DEFAULT_FROM_EMAIL = 'noreply@yamdb.com'
 
+
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(days=14),
     'AUTH_HEADER_TYPES': ('Bearer',),
 }
+
+MIN_SCORE: int = 1
+MAX_SCORE: int = 10
+DEFAULT_SCORE: int = 1
