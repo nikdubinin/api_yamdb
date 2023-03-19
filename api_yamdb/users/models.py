@@ -1,14 +1,18 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
-from .managers import UserRole, UserManager
-
 
 class User(AbstractUser):
 
     USER = 'user'
     MODERATOR = 'moderator'
     ADMIN = 'admin'
+
+    ROLES = [
+        (USER, 'Аутентифицированный пользователь'),
+        (MODERATOR, 'Модератор'),
+        (ADMIN, 'Администратор'),
+    ]
 
     username = models.CharField(
         verbose_name='Имя пользователя',
@@ -18,8 +22,8 @@ class User(AbstractUser):
     )
     email = models.EmailField(
         verbose_name='Email',
-        blank=False,
-        unique=True
+        unique=True,
+        max_length=254
     )
     first_name = models.CharField(
         verbose_name='Имя',
@@ -39,17 +43,23 @@ class User(AbstractUser):
     role = models.CharField(
         verbose_name='Статус пользователя',
         max_length=30,
-        choices=UserRole.choices,
-        default=UserRole.USER
+        choices=ROLES,
+        default=USER
     )
-
-    USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ('username',)
-    objects = UserManager()
+    confirmation_code = models.CharField(
+        max_length=150,
+        blank=True,
+        verbose_name='Код для идентификации'
+    )
 
     class Meta(AbstractUser.Meta):
         verbose_name = 'Пользователь'
         verbose_name_plural = 'Пользователи'
+        constraints = [
+            models.UniqueConstraint(
+                fields=['username', 'email'], name='unique_together'
+            )
+        ]
 
     @property
     def is_admin(self):
