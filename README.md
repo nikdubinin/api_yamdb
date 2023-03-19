@@ -25,7 +25,7 @@ http://localhost:8000/redoc/
 ```
 ### Запуск проекта:
 
-Клонировать репозиторий и перейти в него в командной строке:
+Клонируем репозиторий и перейти в него в терминале:
 
 ```
 git clone https://github.com/nikdubinin/api_yamdb.git
@@ -35,7 +35,7 @@ git clone https://github.com/nikdubinin/api_yamdb.git
 cd api_yamdb
 ```
 
-Cоздать и активировать виртуальное окружение:
+Cоздаем и активируем виртуальное окружение:
 
 ```
 python -m venv venv
@@ -45,7 +45,7 @@ python -m venv venv
 source venv/Scripts/activate
 ```
 
-Установить зависимости из файла requirements.txt:
+Установливаем зависимости из файла requirements.txt:
 
 ```
 python -m pip install --upgrade pip
@@ -55,25 +55,25 @@ python -m pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
-Создать миграции:
+Создаем миграции:
 
 ```
 python manage.py makemigrations reviews
 ```
 
-Выполнить миграции:
+Выполняем миграции:
 
 ```
 python3 manage.py migrate
 ```
 
-Заполнить базу данных тестовой информацией:
+Заполняем базу данных тестовой информацией:
 
 ```
 python manage.py csv_to_db
 ```
 
-Запустить проект:
+Запуск проекта:
 
 ```
 python3 manage.py runserver
