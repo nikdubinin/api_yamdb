@@ -9,7 +9,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **kwargs):
         for row in DictReader(
-            open('./static/data/users.csv')
+            open('./static/data/users.csv', encoding='utf8')
         ):
             user = User(
                 id=row['id'], username=row['username'],
@@ -19,19 +19,19 @@ class Command(BaseCommand):
             )
             user.save()
         for row in DictReader(
-            open('./static/data/category.csv')
+            open('./static/data/category.csv', encoding='utf8')
         ):
             category = Category(
                 id=row['id'], name=row['name'], slug=row['slug']
             )
             category.save()
         for row in DictReader(
-            open('./static/data/genre.csv')
+            open('./static/data/genre.csv', encoding='utf8')
         ):
             genre = Genre(id=row['id'], name=row['name'], slug=row['slug'])
             genre.save()
         for row in DictReader(
-            open('./static/data/titles.csv')
+            open('./static/data/titles.csv', encoding='utf8')
         ):
             title = Title(
                 id=row['id'], name=row['name'],
@@ -39,7 +39,7 @@ class Command(BaseCommand):
             )
             title.save()
         for row in DictReader(
-            open('./static/data/genre_title.csv')
+            open('./static/data/genre_title.csv', encoding='utf8')
         ):
             genre_title = GenreTitle(
                 id=row['id'], title_id=row['title_id'],
@@ -47,7 +47,7 @@ class Command(BaseCommand):
             )
             genre_title.save()
         for row in DictReader(
-            open('./static/data/review.csv')
+            open('./static/data/review.csv', encoding='utf8')
         ):
             review = Review(
                 id=row['id'], title_id=row['title_id'],
@@ -56,7 +56,7 @@ class Command(BaseCommand):
             )
             review.save()
         for row in DictReader(
-            open('./static/data/comments.csv')
+            open('./static/data/comments.csv', encoding='utf8')
         ):
             comment = Comment(
                 id=row['id'], review_id=row['review_id'],
