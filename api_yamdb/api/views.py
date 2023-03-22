@@ -35,7 +35,7 @@ class TitleViewSet(viewsets.ModelViewSet):
     serializer_class = TitleGetSerializer
     permission_classes = (IsAdminOrReadOnly,)
     filter_backends = (DjangoFilterBackend, )
-    filterset_class = TitleFilter
+    filtersetset_class = TitleFilter
 
     def get_serializer_class(self):
         if self.action in ('create', 'update', 'partial_update'):
