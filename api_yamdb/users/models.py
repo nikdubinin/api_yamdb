@@ -1,6 +1,8 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
+from .validators import validate_username
+
 
 class User(AbstractUser):
 
@@ -8,32 +10,22 @@ class User(AbstractUser):
     MODERATOR = 'moderator'
     ADMIN = 'admin'
 
-    ROLES = [
+    ROLES = (
         (USER, 'Аутентифицированный пользователь'),
         (MODERATOR, 'Модератор'),
         (ADMIN, 'Администратор'),
-    ]
+    )
 
     username = models.CharField(
         verbose_name='Имя пользователя',
         max_length=150,
-        blank=False,
-        unique=True
+        unique=True,
+        validators=[validate_username]
     )
     email = models.EmailField(
         verbose_name='Email',
         unique=True,
         max_length=254
-    )
-    first_name = models.CharField(
-        verbose_name='Имя',
-        max_length=150,
-        blank=True
-    )
-    last_name = models.CharField(
-        verbose_name='Фамилия',
-        max_length=150,
-        blank=True
     )
     bio = models.CharField(
         verbose_name='Описание',
@@ -53,7 +45,7 @@ class User(AbstractUser):
     )
 
     class Meta(AbstractUser.Meta):
-        ordering = ('id',)
+        ordering = ('username',)
         verbose_name = 'Пользователь'
         verbose_name_plural = 'Пользователи'
         constraints = [
@@ -64,7 +56,7 @@ class User(AbstractUser):
 
     @property
     def is_admin(self):
-        return self.role == self.ADMIN or self.is_superuser
+        return self.role == self.ADMIN or self.is_superuser or self.is_staff
 
     @property
     def is_moderator(self):
