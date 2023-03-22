@@ -1,6 +1,6 @@
 from django.core.validators import RegexValidator
-
 from rest_framework.serializers import ValidationError
+
 from api_yamdb.settings import FORBIDDEN_USERNAMES
 
 
