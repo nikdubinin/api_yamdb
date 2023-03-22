@@ -143,3 +143,4 @@ DEFAULT_SCORE: int = 1
 FORBIDDEN_USERNAMES = (
     'me',
 )
+CUT_TEXT: int = 30
