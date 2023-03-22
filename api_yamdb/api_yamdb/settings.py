@@ -140,3 +140,6 @@ SIMPLE_JWT = {
 MIN_SCORE: int = 1
 MAX_SCORE: int = 10
 DEFAULT_SCORE: int = 1
+
+
+CUT_TEXT: int = 30
