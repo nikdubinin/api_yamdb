@@ -38,21 +38,11 @@ class User(AbstractUser):
         choices=ROLES,
         default=USER
     )
-    confirmation_code = models.CharField(
-        max_length=150,
-        blank=True,
-        verbose_name='Код для идентификации'
-    )
 
     class Meta(AbstractUser.Meta):
         ordering = ('username',)
         verbose_name = 'Пользователь'
         verbose_name_plural = 'Пользователи'
-        constraints = [
-            models.UniqueConstraint(
-                fields=['username', 'email'], name='unique_together'
-            )
-        ]
 
     @property
     def is_admin(self):

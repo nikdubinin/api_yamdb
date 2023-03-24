@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.shortcuts import get_object_or_404
-from rest_framework import serializers, validators
+from rest_framework import serializers
 
 from reviews.models import Category, Genre, Title, Review, Comment
 from users.validators import validate_username
@@ -91,27 +91,12 @@ class CommentSerializer(serializers.ModelSerializer):
 
 
 class UserSerializer(serializers.ModelSerializer):
-    username = serializers.CharField(
-        max_length=150,
-        validators=[
-            validators.UniqueValidator(
-                queryset=User.objects.all(),
-            ),
-            validate_username
-        ]
-    )
 
     class Meta:
         model = User
         fields = (
             'first_name', 'last_name', 'username', 'bio', 'email', 'role'
         )
-        validators = [
-            serializers.UniqueTogetherValidator(
-                queryset=User.objects.all(),
-                fields=['username', 'email']
-            ),
-        ]
 
 
 class SignUpSerializer(serializers.Serializer):
@@ -122,6 +107,15 @@ class SignUpSerializer(serializers.Serializer):
         max_length=150,
         validators=(validate_username,)
     )
+
+
+class NotAdminUserSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = User
+        fields = (
+            'first_name', 'last_name', 'username', 'bio', 'email'
+        )
 
 
 class ConfirmationSerializer(serializers.Serializer):
