@@ -1,8 +1,12 @@
-from rest_framework import serializers
 from django.conf import settings
+from django.contrib.auth import get_user_model
 from django.shortcuts import get_object_or_404
+from rest_framework import serializers
 
 from reviews.models import Category, Genre, Title, Review, Comment
+from users.validators import validate_username
+
+User = get_user_model()
 
 
 class CategorySerializer(serializers.ModelSerializer):
@@ -49,7 +53,7 @@ class TitlePostSerializer(serializers.ModelSerializer):
     )
 
     class Meta:
-        fields = '__all__' 
+        fields = '__all__'
         model = Title
         read_only_fields = ('id', 'rating')
 
@@ -99,3 +103,41 @@ class CommentSerializer(serializers.ModelSerializer):
         fields = '__all__'
         model = Comment
         read_only_fields = ('review',)
+
+
+class UserSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = User
+        fields = (
+            'first_name', 'last_name', 'username', 'bio', 'email', 'role'
+        )
+
+
+class SignUpSerializer(serializers.Serializer):
+
+    email = serializers.EmailField(required=True, max_length=254)
+    username = serializers.CharField(
+        required=True,
+        max_length=150,
+        validators=(validate_username,)
+    )
+
+
+class NotAdminUserSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = User
+        fields = (
+            'first_name', 'last_name', 'username', 'bio', 'email'
+        )
+
+
+class ConfirmationSerializer(serializers.Serializer):
+
+    username = serializers.CharField(
+        required=True,
+        max_length=150,
+        validators=(validate_username,)
+    )
+    confirmation_code = serializers.CharField(required=True, max_length=150)
