@@ -2,7 +2,7 @@ from django.conf import settings
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 
-from .validators import validate_year
+from .validators import year
 from users.models import User
 
 
@@ -45,7 +45,7 @@ class Title(models.Model):
         verbose_name='Название'
     )
     year = models.PositiveSmallIntegerField(
-        validators=(validate_year,),
+        validators=(year,),
         verbose_name='Год выпуска',
     )
     description = models.TextField(
@@ -90,7 +90,7 @@ class GenreTitle(models.Model):
 
 class ReviewCommentBaseModel(models.Model):
     text = models.TextField(
-        verbose_name='Текст отзыва'
+        verbose_name='Текст'
     )
     pub_date = models.DateTimeField(
         verbose_name='Дата публикации',
@@ -123,7 +123,6 @@ class Review(ReviewCommentBaseModel):
     )
     score = models.PositiveSmallIntegerField(
         verbose_name='Рейтинг',
-        default=settings.DEFAULT_SCORE,
         validators=[
             MinValueValidator(
                 settings.MIN_SCORE, f'Минимальная оценка {settings.MIN_SCORE}'

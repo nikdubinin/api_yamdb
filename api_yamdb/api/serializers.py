@@ -55,7 +55,7 @@ class TitlePostSerializer(serializers.ModelSerializer):
     class Meta:
         fields = '__all__'
         model = Title
-        read_only_fields = ('id', 'rating')
+        read_only_fields = ('rating', )
 
 
 class ReviewSerializer(serializers.ModelSerializer):
@@ -84,7 +84,7 @@ class ReviewSerializer(serializers.ModelSerializer):
                 'Можно оставить только один отзыв'
             )
         return data
-    
+
     def validate_score(self, value):
         if not 1 <= value <= 10:
             raise serializers.ValidationError(
@@ -92,7 +92,6 @@ class ReviewSerializer(serializers.ModelSerializer):
             )
         return value
 
-    
 
 class CommentSerializer(serializers.ModelSerializer):
     author = serializers.SlugRelatedField(
