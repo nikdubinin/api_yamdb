@@ -46,9 +46,9 @@ class GenreViewSet(CatogoryGenreBaseViewSet):
 class TitleViewSet(viewsets.ModelViewSet):
     queryset = Title.objects.annotate(rating=Avg('reviews__score'))
     serializer_class = TitleGetSerializer
-    permission_classes = (IsAdmin | ReadOnly,)
-    filter_backends = (DjangoFilterBackend, )
-    filtersetset_class = TitleFilter
+    permission_classes = (ReadOnly | IsAdmin,)
+    filter_backends = (DjangoFilterBackend,)
+    filterset_class = TitleFilter
 
     def get_serializer_class(self):
         if self.action in ('create', 'update', 'partial_update'):
